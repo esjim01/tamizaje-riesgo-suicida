@@ -114,7 +114,12 @@ progress::-moz-progress-bar { background: var(--brand); border-radius: 99px; }
   border: 1px solid var(--line); background: var(--card); border-radius: 12px;
   padding: 16px 18px 18px; margin: 0 0 10px; min-width: 0;
 }
-.item legend { padding: 0; margin-bottom: 14px; font-weight: 600; font-size: 16px; }
+/* float: saca el legend del borde del fieldset y lo deja dentro de la tarjeta */
+.item legend {
+  float: left; width: 100%; padding: 0; margin: 0 0 14px;
+  font-weight: 600; font-size: 16px; line-height: 1.4;
+}
+.item .scale { clear: both; }
 .item.is-missing { border-color: #e7a3a3; background: #fffafa; }
 
 .scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
