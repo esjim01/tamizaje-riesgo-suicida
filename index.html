@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tamizaje de riesgo suicida y autolesión</title>
+  <meta name="description" content="Formulario de tamizaje con instrumentos validados (ASQ, C-SSRS) y detección directa de autolesión. No es un diagnóstico.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#contenido">Saltar al contenido</a>
+
+  <main class="shell" id="contenido">
+    <header class="top">
+      <p class="eyebrow">Formulación y evaluación de proyectos · Prototipo</p>
+      <h1>Tamizaje de riesgo suicida y autolesión</h1>
+      <p class="lead">Tres instrumentos aplicados en orden: tamizaje ASQ, gravedad C-SSRS y detección de autolesión con el CRA. El resultado indica qué hacer, no un pronóstico.</p>
+    </header>
+
+    <!-- 1. Consentimiento informado -->
+    <section class="card" id="intro-view">
+      <h2>Antes de empezar</h2>
+      <ul class="notice">
+        <li><strong>Qué se aplica</strong>: ASQ (tamizaje de riesgo suicida, 5 preguntas), C-SSRS versión de cribado (gravedad de la ideación y conducta) y, si se reporta autolesión, el CRA (Cuestionario de Riesgo de Autolesión validado en Colombia).</li>
+        <li>Es un <strong>tamizaje orientativo</strong>: no es un diagnóstico ni una evaluación clínica. Las escalas no predicen lo que va a pasar.</li>
+        <li>Sus respuestas <strong>no se guardan ni se envían</strong>: todo ocurre en su navegador y se pierde al cerrar la página.</li>
+        <li>Si hoy tiene pensamientos de hacerse daño o está en peligro, no siga el cuestionario: busque ayuda ahora.</li>
+      </ul>
+
+      <div class="crisis" role="note">
+        <strong>¿Necesita ayuda ahora?</strong>
+        <p>Colombia: <b>Línea 106</b> (Bogotá, 24/7) · <b>123</b> (emergencias). Fuera de Colombia: <b>112</b> (UE), <b>988</b> (EE. UU./Canadá), <b>911</b>. Verifique la línea de crisis de su país.</p>
+      </div>
+
+      <form id="consent-form">
+        <label class="checkline">
+          <input type="checkbox" id="consent" required>
+          <span>He leído esta información y entiendo que el resultado es orientativo y no sustituye la atención profesional.</span>
+        </label>
+        <button type="submit" class="btn primary" id="start-btn" disabled>Comenzar</button>
+      </form>
+    </section>
+
+    <!-- 2. Cuestionario -->
+    <section id="form-view" hidden>
+      <div class="progressbar">
+        <div class="progressbar-row">
+          <span id="progress-text" aria-live="polite">0 de 0 respondidas</span>
+          <span class="progressbar-pct" id="progress-pct">0%</span>
+        </div>
+        <progress id="progress" max="1" value="0"></progress>
+      </div>
+
+      <form id="risk-form" novalidate>
+        <section class="block" id="step-asq">
+          <div class="block-head">
+            <h2>Paso 1 · Tamizaje ASQ</h2>
+            <p>5 preguntas de tamizaje con respuesta sí / no.</p>
+          </div>
+          <div class="block-body" id="asq-body"></div>
+        </section>
+
+        <section class="block" id="step-cssrs" hidden>
+          <div class="block-head block-head--gate">
+            <h2>Paso 2 · Gravedad C-SSRS</h2>
+            <p>Se habilitó porque el tamizaje ASQ fue positivo. Valora la ideación del último mes y la conducta suicida.</p>
+          </div>
+          <div class="block-body" id="cssrs-body"></div>
+        </section>
+
+        <section class="block" id="step-sh">
+          <div class="block-head">
+            <h2>Paso 3 · Autolesión</h2>
+            <p>Preguntas directas de detección (recomendación de la guía NICE NG225).</p>
+          </div>
+          <div class="block-body" id="sh-body"></div>
+
+          <div id="sh-follow" hidden>
+            <div class="block-head block-head--gate">
+              <h2>Detalle de la autolesión</h2>
+              <p>Cuatro preguntas sobre frecuencia, recencia y necesidad de atención.</p>
+            </div>
+            <div class="block-body" id="sh-follow-body"></div>
+          </div>
+
+          <div id="cra-wrap" hidden>
+            <div class="block-head block-head--gate">
+              <h2>CRA · Cuestionario de Riesgo de Autolesión</h2>
+              <p>37 reactivos. Indique con qué frecuencia se identifica con cada afirmación.</p>
+              <p class="anchors">0 Nunca · 1 Casi nunca · 2 Algunas veces · 3 Casi siempre · 4 Siempre</p>
+            </div>
+            <div class="block-body" id="cra-body"></div>
+          </div>
+        </section>
+
+        <p class="error" id="form-error" role="alert" hidden></p>
+        <div class="actions">
+          <button type="submit" class="btn primary">Ver mi resultado</button>
+        </div>
+        <p class="fineprint">Responda pensando en cómo se ha sentido realmente. Puede dejar el cuestionario en cualquier momento.</p>
+      </form>
+    </section>
+
+    <!-- 3. Resultado -->
+    <section id="result-view" hidden aria-live="polite">
+      <div id="result-critical" class="critical" hidden>
+        <strong>Señales que requieren atención inmediata</strong>
+        <p id="critical-text"></p>
+      </div>
+
+      <article class="card level" id="level-card">
+        <p class="eyebrow">Nivel de atención requerido</p>
+        <h2 id="level-title">—</h2>
+        <p class="chips" id="level-chips"></p>
+        <p id="level-text" class="lead"></p>
+        <p class="fineprint" id="level-disclaimer">Ninguna escala predice un acto suicida. Esto orienta la conversación y la derivación, no reemplaza el juicio clínico.</p>
+      </article>
+
+      <section class="card">
+        <h2>Criterios que determinaron el nivel</h2>
+        <ul class="criteria" id="criteria-list"></ul>
+      </section>
+
+      <section class="card">
+        <h2>Qué hacer ahora</h2>
+        <ul class="steps" id="level-steps"></ul>
+      </section>
+
+      <section class="card" id="sh-card" hidden>
+        <h2>Autolesión</h2>
+        <p id="sh-summary"></p>
+        <div id="sh-detail" class="dims"></div>
+        <p class="fineprint" id="cra-note" hidden></p>
+      </section>
+
+      <div class="crisis" role="note">
+        <strong>Si su malestar aumenta o siente que puede hacerse daño</strong>
+        <p>Colombia: <b>Línea 106</b> (Bogotá, 24/7) · <b>123</b> (emergencias). Fuera de Colombia: <b>112</b> (UE), <b>988</b> (EE. UU./Canadá), <b>911</b>. Diga a una persona de confianza dónde está y cómo se siente.</p>
+      </div>
+
+      <div class="actions">
+        <button type="button" class="btn" id="back-btn">Volver a responder</button>
+        <button type="button" class="btn" id="print-btn">Imprimir / guardar PDF</button>
+        <button type="button" class="btn primary" id="restart-btn">Reiniciar</button>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p id="foot-instruments">Instrumentos: ASQ MODORIS (Secretaría de Salud de México, adaptación del Ask Suicide-Screening Questions del NIMH) · C-SSRS versión de cribado (Posner et al., 2011) · CRA (Herrera López et al., 2021). El CRA no publica punto de corte: se reporta como índice descriptivo. La guía NICE NG225 advierte no usar escalas para predecir el suicidio ni para decidir el destino de la persona; su valor es estructurar la pregunta, no clasificar.</p>
+    </footer>
+  </main>
+
+  <script src="src/instruments.js"></script>
+  <script src="src/scoring.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
