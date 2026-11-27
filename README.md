@@ -10,6 +10,20 @@ Abrir `index.html` con doble clic (sin servidor ni instalación; el cálculo ocu
 
 ![Formulario](docs/preview-formulario.png)
 
+## Responsive (todos los dispositivos)
+
+Auditado con emulación real de Chrome a **280, 320, 360, 390, 430, 768, 1024, 1280 y 1920 px** (Galaxy Fold cerrado, iPhone SE, iPhone 13, Pro Max, Android, iPad mini, iPad Pro, laptop y desktop):
+
+- **Cero scroll horizontal** en todos los anchos; ningún elemento desborda su tarjeta.
+- **Objetivos táctiles ≥ 44 × 44 px** en las 222 opciones del formulario (incluida la escala 0–4 del CRA a 280 px).
+- ≤ 480 px: escalas de 3 opciones en una columna y de 4 en dos, botones del resultado a todo el ancho.
+- ≤ 359 px: tarjetas compactas y escala del CRA solo con números (la leyenda 0–4 permanece arriba del bloque).
+- `viewport-fit=cover` + `env(safe-area-inset-*)` para el notch y la barra gestual del iPhone.
+- `@media (hover: none)` evita que los estados *hover* se queden pegados al tocar.
+- La impresión / guardado en PDF conserva su propio diseño (`@media print`).
+
+![Vista móvil](docs/preview-movil.png)
+
 ## Flujo adaptativo
 
 | Paso | Instrumento | Cuándo se aplica | Qué produce |

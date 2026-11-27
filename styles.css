@@ -204,11 +204,51 @@ progress::-moz-progress-bar { background: var(--brand); border-radius: 99px; }
 
 [hidden] { display: none !important; }
 
+/* ---------- responsive ---------- */
+body {
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  padding-bottom: max(64px, calc(48px + env(safe-area-inset-bottom)));
+  -webkit-tap-highlight-color: transparent;
+}
+/* objetivo táctil mínimo de 44px en todas las opciones */
+.opt .box { min-height: 44px; justify-content: center; }
+.chip, .criteria li, .tag, .dim-head span, .level h2 { overflow-wrap: anywhere; }
+
+/* en pantallas táctiles no dejar estados "hover" pegados */
+@media (hover: none) {
+  .opt:hover .box { border-color: var(--line); background: #fff; }
+  .btn:hover { border-color: var(--line); background: var(--card); }
+  .btn.primary:hover { background: var(--brand); border-color: var(--brand); }
+}
+
 @media (max-width: 560px) {
-  body { padding: 0 12px 48px; }
+  body { padding-top: 0; }
   .card { padding: 18px; }
   .opt .anchor { font-size: 10px; }
   .scale { gap: 5px; }
+}
+
+/* móviles: botones a lo ancho y escalas de 3/4 opciones en una o dos columnas */
+@media (max-width: 480px) {
+  .actions .btn { flex: 1 1 100%; }
+  .scale--3 { grid-template-columns: 1fr; }
+  .scale--4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .block-head { padding: 14px; margin-top: 18px; }
+  .top { padding: 28px 2px 18px; }
+  .level h2 { font-size: 23px; }
+}
+
+/* pantallas muy angostas (Galaxy Fold cerrado, 280-359px) */
+@media (max-width: 359px) {
+  body { padding-left: 8px; padding-right: 8px; }
+  .item { padding: 12px 10px 14px; }
+  .scale { gap: 3px; }
+  .opt .box { padding: 6px 2px; }
+  .opt .anchor { display: none; }   /* la escala del CRA ya está explicada arriba */
+  .card { padding: 14px; }
+  .block-head { padding: 12px; }
+  .chips { gap: 6px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
